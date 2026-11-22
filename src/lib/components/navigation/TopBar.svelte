@@ -3,10 +3,13 @@
 	import LanguageToggle from '$lib/components/navigation/LanguageToggle.svelte';
 	import ThemeToggle from '$lib/components/navigation/ThemeToggle.svelte';
 	import { t, locale } from '$lib/i18n/index.js';
+	import { activeCity } from '$lib/services/index.js';
 
-	let { activeCity = null } = $props();
+	let { cityProp = null } = $props();
 
-	let displayCity = $derived(activeCity || $t('topBar.activeCity'));
+	let displayCity = $derived(
+		cityProp || ($locale === 'ar' ? $activeCity?.nameArabic : $activeCity?.name) || $t('topBar.activeCity')
+	);
 </script>
 
 <header class="sticky top-0 z-40 w-full border-b border-border/80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 pt-safe">

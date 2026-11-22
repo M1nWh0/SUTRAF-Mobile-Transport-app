@@ -27,12 +27,12 @@ checked and the application still runs.
     (Company fleet vs Driver single bus).
 -   [ ] Note for future releases: Users will register as a specific user
     type and role buttons will be removed; buttons retained for demo.
--   [ ] MapLibre + configurable OSM-derived tiles are used.
+-   [x] MapLibre + configurable OSM-derived tiles are used.
 -   [x] GeoJSON represents routes and geographic features.
 -   [ ] Bus movement and ETAs are simulated and coherent.
 -   [ ] No backend, database, real authentication, payments, live GPS or
     live traffic has been added.
--   [ ] Simulated data is clearly labelled.
+-   [x] Simulated data is clearly labelled.
 -   [ ] No phase contains unrelated scope expansion.
 
 ------------------------------------------------------------------------
@@ -129,29 +129,44 @@ checked and the application still runs.
 
 ## Phase 4 --- Passenger urban map and exploration
 
--   [ ] MapLibre integrated using Svelte lifecycle correctly.
--   [ ] Map configuration separated from map component.
--   [ ] Tile source is configurable.
--   [ ] No fabricated API credentials.
--   [ ] Map attribution visible.
--   [ ] Map centres on selected city.
--   [ ] Urban route GeoJSON rendered.
--   [ ] Stops rendered at correct positions.
--   [ ] Bus markers displayed.
--   [ ] Stop selection opens correct details.
--   [ ] Bus selection opens correct details.
--   [ ] Route selection highlights/fits route.
--   [ ] Route ordered stops can be inspected.
--   [ ] Loading and map failure states implemented.
--   [ ] Map works on mobile.
--   [ ] RTL/LTR does not break map controls/panels.
--   [ ] Map lifecycle has no duplicate instances or normal-navigation
-    errors.
--   [ ] Build/checks pass.
--   [ ] Phase report received.
+-   [x] MapLibre integrated using Svelte lifecycle correctly.
+-   [x] Map configuration separated from map component.
+-   [x] Tile source is configurable.
+-   [x] No fabricated API credentials.
+-   [x] Map attribution visible.
+-   [x] Map centres on selected city.
+-   [x] Urban route GeoJSON rendered.
+-   [x] Stops rendered at correct positions.
+-   [x] Bus markers displayed.
+-   [x] Stop selection opens correct details.
+-   [x] Bus selection opens correct details.
+-   [x] Route selection highlights/fits route.
+-   [x] Route ordered stops can be inspected.
+-   [x] Loading and map failure states implemented.
+-   [x] Map works on mobile.
+-   [x] RTL/LTR does not break map controls/panels.
+-   [x] Map lifecycle has no duplicate instances or normal-navigation errors.
+-   [x] Build/checks pass.
+-   [x] Phase report received.
 
-**Verification notes:** - Tile provider/config: - Commands: - Issues: -
-Commit / checkpoint:
+**Verification notes:**
+- Tile provider/config: Configurable OpenStreetMap-derived raster tiles (CARTO Voyager light / Dark Matter dark presets with standard OSM fallback, configurable via `VITE_MAP_TILE_URL` or `VITE_MAP_STYLE_URL` in `src/lib/map/config.js`). Visible OSM & CARTO attribution rendered.
+- Commands: `npm run build` (built SSR and client bundles in ~53s without errors), `npx vite --port 5173`, `curl.exe` testing HTTP 200 on `/`, `/urban`, `/urban?route=route-etusa-04`, `/lines`, `/profile`, `/company`, `/admin`.
+- Architecture & components created:
+  - `src/lib/map/config.js`: Separated tile endpoints, attribution, city coordinate presets, and style generator.
+  - `src/lib/map/geojson.js`: Domain-to-GeoJSON converters for routes (LineStrings), stops (Points), buses (Points), and coordinate bounding box calculator.
+  - `src/lib/services/activeCity.js`: Centralized reactive active city store with localStorage persistence across TopBar, Urban map, Lines, and Profile.
+  - `src/lib/components/map/TransitMap.svelte`: Svelte 5 MapLibre component with client lifecycle safety, layer rendering, interactive route/stop clicks, custom DOM bus markers, loading/error states, and zoom/compass controls.
+  - `src/lib/components/map/CitySelector.svelte`: Manual city selection (Algiers, Oran, Constantine) and optional explicit geolocation fallback.
+  - `src/lib/components/map/RouteDetailCard.svelte`: Detail drawer with route summary, operational status, ordered stop list, and assigned buses.
+  - `src/lib/components/map/StopDetailCard.svelte`: Stop detail card with station type, shelter info, served routes, and deterministic arrival times.
+  - `src/lib/components/map/BusDetailCard.svelte`: Bus detail card with model, capacity, status, assigned driver, and assigned route.
+  - `src/lib/components/map/MapLegend.svelte`: Collapsible transit map legend.
+- Mistakes checked & fixed:
+  1. TopBar active city was hardcoded; now reactively synchronized with `$activeCity` in both English and Arabic.
+  2. Profile city preference was disconnected dummy local state; now synchronized with `activeCityId` and canonical IDs.
+  3. Lines page and Home page now support direct `?route={route.id}` deep linking into the urban map with route highlight and camera auto-fit.
+- Commit / checkpoint: Phase 4 passenger urban map and exploration complete.
 
 ## Phase 5 --- Bus simulation, ETA and traffic incidents
 

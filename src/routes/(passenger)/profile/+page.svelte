@@ -8,8 +8,7 @@
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import ThemeToggle from '$lib/components/navigation/ThemeToggle.svelte';
 	import { t, locale, setLocale } from '$lib/i18n/index.js';
-
-	let selectedCity = $state('alger');
+	import { activeCity, activeCityId, setActiveCity } from '$lib/services/index.js';
 </script>
 
 <div class="flex-1 flex flex-col p-4 space-y-4">
@@ -103,7 +102,9 @@
 						<MapPin class="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
 						<span class="font-semibold text-foreground">{$t('profilePage.cityTitle')}</span>
 					</div>
-					<Badge variant="outline">Alger (16)</Badge>
+					<Badge variant="outline">
+						{$locale === 'ar' ? $activeCity?.nameArabic : $activeCity?.name} ({$activeCity?.wilayaId})
+					</Badge>
 				</div>
 				<p class="text-muted-foreground text-[11px]">
 					{$t('profilePage.cityDesc')}
@@ -111,28 +112,28 @@
 				<div class="grid grid-cols-3 gap-1.5 pt-1">
 					<button
 						type="button"
-						class="py-1.5 px-2 rounded-lg text-xs font-medium text-center border transition-all {selectedCity === 'alger'
+						class="py-1.5 px-2 rounded-lg text-xs font-medium text-center border transition-all cursor-pointer {$activeCityId === 'city-alger'
 							? 'bg-emerald-600/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/40 font-semibold'
 							: 'bg-background hover:bg-secondary text-muted-foreground border-border'}"
-						onclick={() => (selectedCity = 'alger')}
+						onclick={() => setActiveCity('city-alger')}
 					>
 						{$t('profilePage.algiersCity')}
 					</button>
 					<button
 						type="button"
-						class="py-1.5 px-2 rounded-lg text-xs font-medium text-center border transition-all {selectedCity === 'oran'
+						class="py-1.5 px-2 rounded-lg text-xs font-medium text-center border transition-all cursor-pointer {$activeCityId === 'city-oran'
 							? 'bg-emerald-600/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/40 font-semibold'
 							: 'bg-background hover:bg-secondary text-muted-foreground border-border'}"
-						onclick={() => (selectedCity = 'oran')}
+						onclick={() => setActiveCity('city-oran')}
 					>
 						{$t('profilePage.oranCity')}
 					</button>
 					<button
 						type="button"
-						class="py-1.5 px-2 rounded-lg text-xs font-medium text-center border transition-all {selectedCity === 'constantine'
+						class="py-1.5 px-2 rounded-lg text-xs font-medium text-center border transition-all cursor-pointer {$activeCityId === 'city-constantine'
 							? 'bg-emerald-600/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/40 font-semibold'
 							: 'bg-background hover:bg-secondary text-muted-foreground border-border'}"
-						onclick={() => (selectedCity = 'constantine')}
+						onclick={() => setActiveCity('city-constantine')}
 					>
 						{$t('profilePage.constantineCity')}
 					</button>

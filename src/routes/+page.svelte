@@ -8,11 +8,17 @@
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import { t, locale } from '$lib/i18n/index.js';
-	import { getUrbanRoutes, getRouteOperationalStatus, calculateTotalRouteDuration } from '$lib/services/index.js';
+	import {
+		activeCity,
+		activeCityId,
+		getUrbanRoutes,
+		getRouteOperationalStatus,
+		calculateTotalRouteDuration
+	} from '$lib/services/index.js';
 
 	let activeTransportMode = $state('urban'); // 'urban' | 'intercity'
 
-	const urbanRoutes = getUrbanRoutes('city-alger');
+	let urbanRoutes = $derived(getUrbanRoutes($activeCityId));
 </script>
 
 <div class="flex-1 flex flex-col p-4 space-y-4">
@@ -118,7 +124,7 @@
 					{#each urbanRoutes as route}
 						{@const opStatus = getRouteOperationalStatus(route.id)}
 						{@const totalDuration = calculateTotalRouteDuration(route.id)}
-						<a href="/urban" class="block">
+						<a href="/urban?route={route.id}" class="block">
 							<div class="p-2.5 rounded-xl bg-card border border-border/80 hover:border-emerald-600/40 hover:bg-secondary/40 transition-all flex items-center justify-between text-xs">
 								<div class="flex items-center gap-2.5">
 									<span

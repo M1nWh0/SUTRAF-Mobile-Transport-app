@@ -10,7 +10,14 @@ export function getCities() {
 
 export function getCityById(id) {
 	if (!id) return null;
-	return cities.find((c) => c.id === id) || null;
+	return (
+		cities.find(
+			(c) =>
+				c.id === id ||
+				c.wilayaId === id ||
+				c.wilayaId === String(id).padStart(2, '0')
+		) || null
+	);
 }
 
 export function getDefaultCity() {
@@ -18,7 +25,9 @@ export function getDefaultCity() {
 }
 
 export function getUrbanRoutes(cityId = 'city-alger') {
-	return routes.filter((r) => !cityId || r.cityId === cityId);
+	const city = getCityById(cityId);
+	const targetId = city ? city.id : cityId;
+	return routes.filter((r) => !cityId || r.cityId === targetId);
 }
 
 export function getUrbanRouteById(id) {
@@ -43,7 +52,35 @@ export function getRouteBuses(routeId) {
 }
 
 export function getAllStops(cityId = 'city-alger') {
-	return stops.filter((s) => !cityId || s.cityId === cityId);
+	const city = getCityById(cityId);
+	const targetId = city ? city.id : cityId;
+	return stops.filter((s) => !cityId || s.cityId === targetId);
+}
+
+export function getBusById(id) {
+	if (!id) return null;
+	return buses.find((b) => b.id === id) || null;
+}
+
+export function getAllBuses() {
+	return buses;
+}
+
+/**
+ * Returns all buses active in a given city (by route assignment)
+ */
+export function getCityBuses(cityId = 'city-alger') {
+	const cityRoutes = getUrbanRoutes(cityId);
+	const cityRouteIds = new Set(cityRoutes.map((r) => r.id));
+	return buses.filter((b) => b.routeId && cityRouteIds.has(b.routeId));
+}
+
+/**
+ * Returns all routes that serve a specific stop
+ */
+export function getRoutesByStopId(stopId) {
+	if (!stopId) return [];
+	return routes.filter((r) => Array.isArray(r.stopIds) && r.stopIds.includes(stopId));
 }
 
 /**

@@ -138,3 +138,37 @@
 	min-height: 40px;
 	min-width: 40px;
 }
+
+/* MapLibre transit theme adjustments */
+.maplibregl-ctrl-group {
+	border-radius: 0.5rem !important;
+	border: 1px solid hsl(var(--border)) !important;
+	background: hsl(var(--card)) !important;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+	overflow: hidden;
+}
+
+.maplibregl-ctrl-group button {
+	border-bottom: 1px solid hsl(var(--border)) !important;
+	background: transparent !important;
+}
+
+.maplibregl-ctrl-group button:last-child {
+	border-bottom: none !important;
+}
+
+.dark .maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+	filter: invert(1);
+}
+
+.maplibregl-ctrl-attrib {
+	background-color: hsl(var(--background) / 0.85) !important;
+	color: hsl(var(--muted-foreground)) !important;
+	font-size: 10px !important;
+	border-top-left-radius: 0.375rem !important;
+	backdrop-filter: blur(4px);
+}
+
+.dark .maplibregl-ctrl-attrib a {
+	color: hsl(var(--primary)) !important;
+}

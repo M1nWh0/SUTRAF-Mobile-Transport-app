@@ -3,6 +3,7 @@
  * Central export for all domain services.
  */
 
+export * from './activeCity.js';
 export * from './urbanService.js';
 export * from './intercityService.js';
 export * from './operatorService.js';
