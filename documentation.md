@@ -86,19 +86,25 @@ whether an incident is affecting a route. - Search for a trip between
 two wilayas. - Inspect departure time, arrival time, operator, price and
 intermediate stops. - View demonstration tickets or subscriptions.
 
-### Company / Driver
+### Company and Driver
 
-A representative of a transport company who manages that company's buses
-and operational information.
+The **Company** and **Driver** roles share the exact same underlying operator workspace and management logic. The **sole difference** between them is the fleet management scope:
+- A **Company** user manages and checks **multiple buses** (a fleet of vehicles).
+- A **Driver** user manages and checks **only one bus** (their single assigned vehicle).
 
-Primary needs: - View the company's buses. - Add or edit bus
-information. - Assign buses to routes. - Update mock bus status and
-estimated timing information. - View the routes and schedules associated
-with the company.
+Both users view operational information, route assignments, scheduled segments, and simulated operational status, but a Driver's view is scoped to a single vehicle while a Company user's view is scoped to the operator's multi-vehicle fleet.
 
-The company/driver role is intentionally combined for this project. It
-represents an operator-side account rather than a real driver-tracking
-system.
+Primary needs:
+- View assigned bus(es) (1 bus for Driver, multiple buses for Company).
+- Add or edit bus information (Company adds/edits across fleet; Driver checks/updates their assigned bus).
+- Assign buses to routes or view current route assignment.
+- Update mock bus status and estimated timing information.
+- View the routes and schedules associated with the operator.
+
+> [!NOTE]
+> **Future Authentication & Role Boundary Architecture Note:**
+> In the production architecture, Passenger, Driver, Company, and Global Admin are distinct user types. Users will register or sign in as one specific user type and will only be granted access to their designated workspace; cross-role switching will not be permitted.
+> The three preview buttons currently visible in the top demo banner (`Passenger`, `Company / Driver`, `Global Admin`) are provided strictly for demonstration, evaluation, and rapid testing during development phases. **In the future, these three role-switching buttons will be removed** once real registration and authentication flows are introduced. (They are retained for current demo phases until explicit instruction to remove them).
 
 ### Global Admin
 
@@ -524,17 +530,23 @@ necessarily the user's physical location.
 
 ## 3.7 Authentication and role simulation
 
-There is no real authentication in the initial version.
+There is no real authentication in the initial learning version.
 
-Use demonstration accounts or a role-selection flow to preview: -
-Passenger - Company / Driver - Global Admin
+For development, evaluation, and presentation purposes, a top demonstration banner provides role preview switching between:
+- **Passenger**: Explores urban maps, intercity trips, lines, tickets and user settings.
+- **Company / Driver**: Shared operator workspace. Company manages multiple buses; Driver manages only one bus.
+- **Global Admin**: Manages network entities (wilayas, lines, buses, incidents).
 
-The UI should show the correct workspace and restrict visible actions
-according to the selected demonstration role.
+### Operator Scoping (Company vs Driver)
+Company and Driver operate in the same domain workspace. The only difference is fleet scale:
+- A **Company** user checks and manages **multiple buses** ($N > 1$).
+- A **Driver** user checks and manages **only one bus** ($1$ assigned vehicle).
 
-These restrictions are for interface behaviour only. Frontend role
-checks are not security boundaries. A future production version must
-enforce authentication and authorization on a backend.
+### Future Registration and Authentication Model
+> [!IMPORTANT]
+> **Future Architecture Note:**
+> In a production release, Passenger, Driver, Company, and Global Admin are distinct user types. Users will register and authenticate as one specific user type and will only have access to their designated workspace; they will not be able to access or switch to other roles.
+> The three preview buttons (`Passenger`, `Company / Driver`, `Global Admin`) currently available in the demo banner will be **removed in the future** when real authentication and user registration are introduced. (They are retained for current demo phases until explicit instruction to remove them).
 
 ## 3.8 Capacitor and SvelteKit
 
@@ -619,21 +631,24 @@ View demonstration ticket details if included
 ## 4.4 Company / Driver
 
 ``` text
-Demo sign-in / role selection
+User signs in / Demo role preview
   ↓
-Company workspace
+Operator workspace
   ↓
-View own fleet
-  ├── Add bus
+View assigned fleet/bus:
+  ├── Company: views and manages multiple buses (N > 1)
+  └── Driver: views and manages single assigned bus (1)
+  ↓
+Manage operational records:
+  ├── Add bus (Company scope)
   ├── Edit bus details
-  ├── Change mock bus status
+  ├── Change mock bus status (Active / In Depot / Delayed)
   └── Assign bus to an available company route
   ↓
-View and update own schedule / timing data
+View and update schedule / timing data
 ```
 
-The company/driver user must not be able to manage another company's
-records.
+The company/driver user manages exclusively their own operator records and cannot view or edit another company's records. (Note: in future production, users register strictly as Passenger, Driver, Company, or Admin, and the demo role switcher will be removed).
 
 ## 4.5 Global Admin
 

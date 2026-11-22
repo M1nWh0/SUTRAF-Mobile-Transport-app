@@ -164,7 +164,13 @@ your own words and make a small change.
 
 ## Phase 8 --- Demo roles and Company / Driver workspace
 
--   [ ] I understand the demo role-selection flow.
+-   [ ] I understand that Company and Driver share the exact same operator
+    workspace logic, with the sole difference being that a Company manages
+    multiple buses while a Driver manages only one bus.
+-   [ ] I understand the future authentication architecture where users
+    register as a specific user type, and the 3 demo role buttons will be
+    removed in favor of strict role-based access.
+-   [ ] I understand the demo role-selection flow used during learning/demo phases.
 -   [ ] I can explain how the selected user determines company context.
 -   [ ] I understand conditional rendering for role-specific UI.
 -   [ ] I understand the CRUD flow from form to updated list.

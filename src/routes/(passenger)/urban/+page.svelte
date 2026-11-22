@@ -3,14 +3,20 @@
 	import Card from '$lib/components/ui/Card.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import { t } from '$lib/i18n/index.js';
+	import { t, locale } from '$lib/i18n/index.js';
+	import { getUrbanRoutes, getCityById, getRouteOperationalStatus } from '$lib/services/index.js';
+
+	const activeCity = getCityById('city-alger');
+	const urbanRoutes = getUrbanRoutes('city-alger');
 </script>
 
 <div class="flex-1 flex flex-col p-4 space-y-4">
 	<div class="flex items-center justify-between">
 		<div>
 			<h1 class="text-lg font-bold tracking-tight">{$t('urbanPage.title')}</h1>
-			<p class="text-xs text-muted-foreground">{$t('urbanPage.subtitle')}</p>
+			<p class="text-xs text-muted-foreground">
+				{$locale === 'ar' ? activeCity?.nameArabic : activeCity?.name} • {$t('urbanPage.subtitle')}
+			</p>
 		</div>
 		<Badge variant="simulation">{$t('urbanPage.phaseBadge')}</Badge>
 	</div>
@@ -27,32 +33,37 @@
 			</p>
 		</div>
 		<div class="flex items-center gap-2 pt-2">
-			<Badge variant="outline">{$t('urbanPage.centerCoords')}</Badge>
+			<Badge variant="outline">Centre: [{activeCity?.centreCoordinates.join(', ')}]</Badge>
 			<Badge variant="success">{$t('urbanPage.osmAttribution')}</Badge>
 		</div>
 	</div>
 
-	<!-- Stops & Routes Quick Drawer Placeholder -->
+	<!-- Stops & Routes Quick Drawer from Domain Layer -->
 	<Card class="p-3">
 		<div class="flex items-center justify-between mb-2">
 			<h3 class="text-xs font-semibold">{$t('urbanPage.availableLines')}</h3>
-			<span class="text-[11px] text-muted-foreground">{$t('urbanPage.activeLinesCount')}</span>
+			<span class="text-[11px] text-muted-foreground">{urbanRoutes.length} {$t('home.activeLines')}</span>
 		</div>
 		<div class="space-y-2">
-			<div class="p-2 rounded-lg bg-secondary/50 border border-border/40 flex items-center justify-between text-xs">
-				<div class="flex items-center gap-2">
-					<span class="px-2 py-0.5 rounded bg-amber-500 font-bold text-slate-950 text-[11px]">L04</span>
-					<span>Place des Martyrs ↔ Tafourah</span>
+			{#each urbanRoutes as route}
+				{@const opStatus = getRouteOperationalStatus(route.id)}
+				<div class="p-2 rounded-lg bg-secondary/50 border border-border/40 flex items-center justify-between text-xs">
+					<div class="flex items-center gap-2">
+						<span
+							class="px-2 py-0.5 rounded font-bold text-white text-[11px]"
+							style="background-color: {route.color || '#059669'}"
+						>
+							{route.code}
+						</span>
+						<span class="truncate max-w-[170px] sm:max-w-none">
+							{$locale === 'ar' ? route.nameArabic : route.name}
+						</span>
+					</div>
+					<Badge variant={opStatus.statusKey === 'smooth' ? 'success' : 'warning'}>
+						{$t(`home.${opStatus.statusKey}`)}
+					</Badge>
 				</div>
-				<span class="text-emerald-600 dark:text-emerald-400 font-medium">{$t('urbanPage.nextBus')} 4 {$t('urbanPage.min')}</span>
-			</div>
-			<div class="p-2 rounded-lg bg-secondary/50 border border-border/40 flex items-center justify-between text-xs">
-				<div class="flex items-center gap-2">
-					<span class="px-2 py-0.5 rounded bg-emerald-600 font-bold text-white text-[11px]">L12</span>
-					<span>Grande Poste ↔ Bab Ezzouar</span>
-				</div>
-				<span class="text-amber-600 dark:text-amber-400 font-medium">{$t('urbanPage.nextBus')} 9 {$t('urbanPage.min')}</span>
-			</div>
+			{/each}
 		</div>
 	</Card>
 </div>

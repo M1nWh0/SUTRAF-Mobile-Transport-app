@@ -18,13 +18,17 @@ checked and the application still runs.
 -   [x] SvelteKit + Svelte 5 remain the application foundation.
 -   [x] Tailwind CSS and shadcn-svelte are used consistently.
 -   [x] `mode-watcher` handles theme behaviour.
--   [ ] Mock data and domain logic are separate from components.
+-   [x] Mock data and domain logic are separate from components.
 -   [x] Arabic RTL and English LTR are supported.
--   [ ] Passenger, Company/Driver and Global Admin experiences are
-    distinct.
--   [ ] Company data operations are scoped to the selected company.
+-   [ ] Passenger, Operator (Company/Driver), and Global Admin
+    experiences are distinct (Note: Company manages multiple buses;
+    Driver manages only 1 bus).
+-   [x] Company data operations are scoped to the selected operator
+    (Company fleet vs Driver single bus).
+-   [ ] Note for future releases: Users will register as a specific user
+    type and role buttons will be removed; buttons retained for demo.
 -   [ ] MapLibre + configurable OSM-derived tiles are used.
--   [ ] GeoJSON represents routes and geographic features.
+-   [x] GeoJSON represents routes and geographic features.
 -   [ ] Bus movement and ETAs are simulated and coherent.
 -   [ ] No backend, database, real authentication, payments, live GPS or
     live traffic has been added.
@@ -84,27 +88,44 @@ checked and the application still runs.
 
 ## Phase 3 --- Domain model and structured mock data
 
--   [ ] Stable IDs and entity relationships defined.
--   [ ] Wilaya and City data created.
--   [ ] Company and demo User data created.
--   [ ] UrbanRoute data created.
--   [ ] Stop data created.
--   [ ] Bus data created.
--   [ ] IntercityTrip data created.
--   [ ] Incident data created.
--   [ ] Subscription and Ticket data created.
--   [ ] Geographic coordinates are plausible and internally consistent.
--   [ ] Route geometry is GeoJSON-compatible.
--   [ ] Route stop order is explicit.
--   [ ] Fixed segment durations are stored.
--   [ ] Company ownership is represented.
--   [ ] Query/helper services are available.
--   [ ] Invalid references are handled defensively.
--   [ ] Components do not contain large hardcoded datasets.
--   [ ] Build/checks pass.
--   [ ] Phase report received.
+-   [x] Stable IDs and entity relationships defined.
+-   [x] Wilaya and City data created.
+-   [x] Company and demo User data created.
+-   [x] UrbanRoute data created.
+-   [x] Stop data created.
+-   [x] Bus data created.
+-   [x] IntercityTrip data created.
+-   [x] Incident data created.
+-   [x] Subscription and Ticket data created.
+-   [x] Geographic coordinates are plausible and internally consistent.
+-   [x] Route geometry is GeoJSON-compatible.
+-   [x] Route stop order is explicit.
+-   [x] Fixed segment durations are stored.
+-   [x] Company ownership is represented.
+-   [x] Query/helper services are available.
+-   [x] Invalid references are handled defensively.
+-   [x] Components do not contain large hardcoded datasets.
+-   [x] Build/checks pass.
+-   [x] Phase report received.
 
-**Verification notes:** - Commands: - Issues: - Commit / checkpoint:
+**Verification notes:**
+- Commands: `npm run build` (built SSR and client bundles in ~48s without errors), `npm run preview -- --port 4173`, `curl.exe` verifying HTTP 200 on all routes and content rendering from services.
+- Data created:
+  - Canonical 58 wilayas of Algeria (`wilayas.js`).
+  - 3 urban centers (`cities.js`: Algiers, Oran, Constantine) with GeoJSON center coordinates.
+  - Multi-tenant operators (`companies.js`: ETUSA, SOGRAL, El Ghazala, ETO).
+  - Structured demo users (`users.js`): Passenger Karim Benali, Driver Ahmed Mansouri (single bus `BUS-16-042`), Company ETUSA Fleet Admin (multiple buses), Admin.
+  - Algiers landmark stops (`stops.js`) with GeoJSON `[longitude, latitude]` coordinates.
+  - Urban routes (`routes.js`) with GeoJSON LineString paths, ordered stops, and explicit segment durations.
+  - Fleet buses (`buses.js`) scoped by company and driver.
+  - Intercity trips (`trips.js`) with intermediate stops, fares, and scheduled times.
+  - Route incidents (`incidents.js`) with deterministic segment delays.
+  - Passenger passes & tickets (`tickets.js`).
+  - Service layer (`urbanService.js`, `intercityService.js`, `operatorService.js`, `simulationService.js`, `passengerService.js`).
+- Issues caught & fixed:
+  1. Connected UI components (`lines`, `intercity`, `tickets`, `company`, `admin`, `urban`, `home`) to consume domain services rather than holding hardcoded inline mock arrays.
+  2. Implemented intermediate-stop trip matching for intercity travel.
+- Commit / checkpoint: Phase 3 domain model and structured mock data complete.
 
 ## Phase 4 --- Passenger urban map and exploration
 
@@ -202,11 +223,12 @@ checkpoint:
 
 -   [ ] Demo role/account selection implemented.
 -   [ ] Passenger role works.
--   [ ] Company/Driver role works.
+-   [ ] Company/Driver role works (same workspace; Company manages multiple buses, Driver manages only 1 bus).
 -   [ ] Global Admin role works.
+-   [ ] Note for future: Registration will restrict users to 1 user type, and the 3 demo role buttons will be removed.
 -   [ ] No real authentication is claimed.
 -   [ ] Company dashboard implemented.
--   [ ] Fleet list scoped to selected company.
+-   [ ] Fleet list scoped to selected company (multiple buses) or driver (single bus).
 -   [ ] Add bus form implemented.
 -   [ ] Edit bus form implemented.
 -   [ ] Bus route assignment constrained to company routes.

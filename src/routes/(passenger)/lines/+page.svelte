@@ -2,14 +2,10 @@
 	import { Route, Clock, ChevronRight } from '@lucide/svelte';
 	import Card from '$lib/components/ui/Card.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
-	import { t, dir } from '$lib/i18n/index.js';
+	import { t, locale } from '$lib/i18n/index.js';
+	import { getUrbanRoutes, calculateTotalRouteDuration, getRouteOperationalStatus } from '$lib/services/index.js';
 
-	const sampleRoutes = [
-		{ code: 'L01', name: 'Tafourah ↔ Bab El Oued', stopsCount: 16, frequency: '6 min', status: 'Fluid' },
-		{ code: 'L04', name: 'Place des Martyrs ↔ Tafourah', stopsCount: 14, frequency: '8 min', status: 'Fluid' },
-		{ code: 'L12', name: 'Grande Poste ↔ Bab Ezzouar', stopsCount: 22, frequency: '12 min', status: 'Delay' },
-		{ code: 'T01', name: 'Ruisseau ↔ Dergana (Tramway)', stopsCount: 38, frequency: '5 min', status: 'Fluid' }
-	];
+	const urbanRoutes = getUrbanRoutes('city-alger');
 </script>
 
 <div class="flex-1 flex flex-col p-4 space-y-4">
@@ -19,29 +15,36 @@
 	</div>
 
 	<div class="space-y-2">
-		{#each sampleRoutes as route}
+		{#each urbanRoutes as route}
+			{@const totalDuration = calculateTotalRouteDuration(route.id)}
+			{@const opStatus = getRouteOperationalStatus(route.id)}
 			<a href="/urban" class="block">
 				<Card class="p-3.5 hover:border-emerald-600/50 hover:bg-secondary/40 transition-all">
 					<div class="flex items-center justify-between">
 						<div class="flex items-center gap-3">
-							<span class="flex h-9 w-11 items-center justify-center rounded-lg bg-emerald-700 font-bold text-xs text-white shadow-xs">
+							<span
+								class="flex h-9 w-11 items-center justify-center rounded-lg font-bold text-xs text-white shadow-xs"
+								style="background-color: {route.color || '#059669'}"
+							>
 								{route.code}
 							</span>
 							<div>
-								<h3 class="text-xs font-semibold text-foreground">{route.name}</h3>
+								<h3 class="text-xs font-semibold text-foreground">
+									{$locale === 'ar' ? route.nameArabic : route.name}
+								</h3>
 								<div class="flex items-center gap-2 text-[10px] text-muted-foreground mt-0.5">
-									<span>{route.stopsCount} {$t('home.stopsCount')}</span>
+									<span>{route.stopIds.length} {$t('home.stopsCount')}</span>
 									<span>•</span>
 									<span class="flex items-center gap-0.5">
 										<Clock class="h-2.5 w-2.5" />
-										~{route.frequency}
+										~{totalDuration} {$t('urbanPage.min')}
 									</span>
 								</div>
 							</div>
 						</div>
 						<div class="flex items-center gap-2">
-							<Badge variant={route.status === 'Fluid' ? 'success' : 'warning'}>
-								{route.status}
+							<Badge variant={opStatus.statusKey === 'smooth' ? 'success' : 'warning'}>
+								{$t(`home.${opStatus.statusKey}`)}
 							</Badge>
 							<ChevronRight class="h-4 w-4 text-muted-foreground rtl:rotate-180 transition-transform" />
 						</div>

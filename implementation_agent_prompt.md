@@ -19,8 +19,19 @@ acceptance criteria. - The exact phase supplied by the user --- the
 current scope.
 
 The app supports urban transport in Algerian cities and intercity trips
-between wilayas. It has three demo roles: Passenger, Company/Driver and
-Global Admin.
+between wilayas. It features Passenger, Operator (Company / Driver), and
+Global Admin workspaces.
+
+Key architectural concepts to uphold:
+- **Company vs Driver**: A Company and a Driver share the exact same
+  operator workspace and domain logic. The sole difference between them
+  is fleet scope: a Company manages multiple buses ($N > 1$), while a
+  Driver manages only one bus ($1$).
+- **Future Registration & Auth Model**: In production, users will
+  register as one specific user type (Passenger, Driver/Company, Admin)
+  and cannot switch roles. The 3 preview buttons in the top demo banner
+  will be removed in the future once real authentication is implemented.
+  (Do not remove these 3 buttons yet until explicitly instructed).
 
 ## Mandatory rules
 

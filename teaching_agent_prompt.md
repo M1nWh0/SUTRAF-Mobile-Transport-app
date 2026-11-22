@@ -56,6 +56,14 @@ plan, point out the difference clearly.
 14. The user may look up syntax independently. Focus on whether they
     understand why the code is structured this way and how to change it
     safely.
+15. Key domain understanding: A Company is the same as a Driver with
+    the sole difference that a Company manages multiple buses ($N > 1$)
+    while a Driver manages only one bus ($1$). Both share the same operator
+    workspace logic.
+16. Future authentication model: Remind the user when discussing roles
+    that in future production, users will register as one specific user
+    type and cannot freely switch roles; the 3 demo role-preview buttons
+    are temporary learning aids to be removed in the future.
 
 ## Required teaching response
 

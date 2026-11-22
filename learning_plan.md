@@ -284,7 +284,13 @@ preferences without duplicating their logic.
 
 ### Learn
 
--   Role-based UI composition.
+-   Role-based UI composition and operator scoping.
+-   The relationship between Company and Driver: identical operator
+    workspace logic, with the sole difference being fleet scope
+    (Company manages multiple buses; Driver manages only one bus).
+-   Future authentication model: users register as one specific user
+    type and cannot freely switch roles; the 3 demo role-preview
+    buttons will be removed in the future.
 -   Conditional rendering.
 -   Demo account selection and session state.
 -   CRUD operations in frontend state.
@@ -295,7 +301,7 @@ preferences without duplicating their logic.
 
 ### Understand deeply
 
--   How the selected demo user determines the company context.
+-   How the selected demo user determines the operator context (Company with multiple buses vs Driver with 1 bus).
 -   How a bus is checked against the selected company.
 -   Why hiding another company's record in the UI is not enough for real
     security.

@@ -7,9 +7,13 @@
 	import CardContent from '$lib/components/ui/CardContent.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import { t } from '$lib/i18n/index.js';
+	import { t, locale } from '$lib/i18n/index.js';
+	import { getCompanyById, getCompanyBuses, getFleetStats, getCompanyRoutes } from '$lib/services/index.js';
 
-	let activeOperator = 'ETUSA (Entreprise de Transport Urbain et Suburbain d\'Alger)';
+	const activeCompany = getCompanyById('comp-etusa');
+	const companyBuses = getCompanyBuses('comp-etusa');
+	const fleetStats = getFleetStats('comp-etusa');
+	const operatedRoutes = getCompanyRoutes('comp-etusa');
 </script>
 
 <div class="flex-1 flex flex-col p-4 sm:p-6 space-y-5">
@@ -23,7 +27,7 @@
 				<h1 class="text-xl font-bold tracking-tight">{$t('companyPage.title')}</h1>
 			</div>
 			<p class="text-xs text-muted-foreground mt-0.5">
-				{$t('companyPage.operatorLabel')} <strong class="text-foreground">{activeOperator}</strong>
+				{$t('companyPage.operatorLabel')} <strong class="text-foreground">{$locale === 'ar' ? activeCompany?.nameArabic : activeCompany?.name}</strong>
 			</p>
 		</div>
 
@@ -42,15 +46,17 @@
 		</div>
 	</div>
 
-	<!-- Operator Fleet Overview Stats -->
+	<!-- Operator Fleet Overview Stats from Domain Service -->
 	<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
 		<Card class="p-4">
 			<div class="flex items-center justify-between">
 				<span class="text-xs text-muted-foreground">{$t('companyPage.activeFleet')}</span>
 				<Bus class="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
 			</div>
-			<div class="mt-2 text-2xl font-bold">12 Bus</div>
-			<span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">{$t('companyPage.fleetStats')}</span>
+			<div class="mt-2 text-2xl font-bold">{fleetStats.total} Buses</div>
+			<span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+				{fleetStats.enRoute} en route • {fleetStats.atDepot} at depot
+			</span>
 		</Card>
 
 		<Card class="p-4">
@@ -58,8 +64,10 @@
 				<span class="text-xs text-muted-foreground">{$t('companyPage.operatedLines')}</span>
 				<Calendar class="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
 			</div>
-			<div class="mt-2 text-2xl font-bold">4 Lines</div>
-			<span class="text-[10px] text-muted-foreground">L01, L04, L12, L18</span>
+			<div class="mt-2 text-2xl font-bold">{operatedRoutes.length} Lines</div>
+			<span class="text-[10px] text-muted-foreground">
+				{operatedRoutes.map((r) => r.code).join(', ')}
+			</span>
 		</Card>
 
 		<Card class="p-4">
@@ -67,12 +75,12 @@
 				<span class="text-xs text-muted-foreground">{$t('companyPage.driversCount')}</span>
 				<Users class="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
 			</div>
-			<div class="mt-2 text-2xl font-bold">16 Drivers</div>
-			<span class="text-[10px] text-muted-foreground">{$t('companyPage.activeAssignments')}</span>
+			<div class="mt-2 text-2xl font-bold">1 Driver Demo</div>
+			<span class="text-[10px] text-muted-foreground">Ahmed Mansouri (BUS-16-042)</span>
 		</Card>
 	</div>
 
-	<!-- Fleet Table Placeholder -->
+	<!-- Fleet List from Structured Mock Data -->
 	<Card>
 		<CardHeader class="flex flex-row items-center justify-between pb-3">
 			<div>
@@ -86,21 +94,26 @@
 		</CardHeader>
 		<CardContent>
 			<div class="space-y-2 text-xs">
-				<div class="p-3 rounded-lg bg-secondary/50 border border-border/50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-					<div class="flex items-center gap-3">
-						<span class="px-2.5 py-1 rounded-md bg-emerald-600 text-white font-mono font-bold text-xs">
-							BUS-16-042
-						</span>
-						<div>
-							<h4 class="font-semibold text-foreground">Mercedes Citaro • Line L04</h4>
-							<span class="text-muted-foreground text-[11px]">{$t('companyPage.driverLabel')} A. Mansouri</span>
+				{#each companyBuses as bus}
+					<div class="p-3 rounded-lg bg-secondary/50 border border-border/50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+						<div class="flex items-center gap-3">
+							<span class="px-2.5 py-1 rounded-md bg-emerald-600 text-white font-mono font-bold text-xs">
+								{bus.label}
+							</span>
+							<div>
+								<h4 class="font-semibold text-foreground">{bus.model}</h4>
+								<span class="text-muted-foreground text-[11px]">
+									Route: {bus.routeId || 'Unassigned'} • Capacity: {bus.capacity}
+								</span>
+							</div>
+						</div>
+						<div class="flex items-center gap-2">
+							<Badge variant={bus.status === 'en_route' ? 'success' : bus.status === 'delayed' ? 'warning' : 'outline'}>
+								{bus.status === 'en_route' ? $t('companyPage.enRoute') : bus.status}
+							</Badge>
 						</div>
 					</div>
-					<div class="flex items-center gap-2">
-						<Badge variant="success">{$t('companyPage.enRoute')}</Badge>
-						<span class="text-muted-foreground text-[11px]">{$t('companyPage.nextStop')} Tafourah</span>
-					</div>
-				</div>
+				{/each}
 			</div>
 		</CardContent>
 	</Card>

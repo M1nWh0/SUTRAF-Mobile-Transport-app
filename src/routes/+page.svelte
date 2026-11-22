@@ -7,15 +7,12 @@
 	import CardContent from '$lib/components/ui/CardContent.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
-	import { t } from '$lib/i18n/index.js';
+	import { t, locale } from '$lib/i18n/index.js';
+	import { getUrbanRoutes, getRouteOperationalStatus, calculateTotalRouteDuration } from '$lib/services/index.js';
 
 	let activeTransportMode = $state('urban'); // 'urban' | 'intercity'
 
-	const sampleRoutes = [
-		{ code: 'L01', nameEn: 'Tafourah ↔ Bab El Oued', nameAr: 'تافورة ↔ باب الواد', stops: 16, freq: '6', statusKey: 'smooth' },
-		{ code: 'L04', nameEn: 'Place des Martyrs ↔ Tafourah', nameAr: 'ساحة الشهداء ↔ تافورة', stops: 14, freq: '8', statusKey: 'smooth' },
-		{ code: 'L12', nameEn: 'Grande Poste ↔ Bab Ezzouar', nameAr: 'البريد المركزي ↔ باب الزوار', stops: 22, freq: '12', statusKey: 'delay' }
-	];
+	const urbanRoutes = getUrbanRoutes('city-alger');
 </script>
 
 <div class="flex-1 flex flex-col p-4 space-y-4">
@@ -106,7 +103,7 @@
 				</CardContent>
 			</Card>
 
-			<!-- Quick Lines Preview -->
+			<!-- Quick Lines Preview from Domain Services -->
 			<div class="space-y-2">
 				<div class="flex items-center justify-between px-1">
 					<h2 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -118,24 +115,29 @@
 				</div>
 
 				<div class="space-y-1.5">
-					{#each sampleRoutes as route}
+					{#each urbanRoutes as route}
+						{@const opStatus = getRouteOperationalStatus(route.id)}
+						{@const totalDuration = calculateTotalRouteDuration(route.id)}
 						<a href="/urban" class="block">
 							<div class="p-2.5 rounded-xl bg-card border border-border/80 hover:border-emerald-600/40 hover:bg-secondary/40 transition-all flex items-center justify-between text-xs">
 								<div class="flex items-center gap-2.5">
-									<span class="flex h-7 w-9 items-center justify-center rounded-md bg-emerald-700 font-bold text-xs text-white">
+									<span
+										class="flex h-7 w-9 items-center justify-center rounded-md font-bold text-xs text-white"
+										style="background-color: {route.color || '#059669'}"
+									>
 										{route.code}
 									</span>
 									<div>
 										<span class="font-semibold block text-foreground">
-											{route.nameEn}
+											{$locale === 'ar' ? route.nameArabic : route.name}
 										</span>
 										<span class="text-[10px] text-muted-foreground">
-											{route.stops} {$t('home.stopsCount')} • ~{route.freq} {$t('home.stopsCount')}
+											{route.stopIds.length} {$t('home.stopsCount')} • ~{totalDuration} {$t('urbanPage.min')}
 										</span>
 									</div>
 								</div>
-								<Badge variant={route.statusKey === 'smooth' ? 'success' : 'warning'}>
-									{$t(`home.${route.statusKey}`)}
+								<Badge variant={opStatus.statusKey === 'smooth' ? 'success' : 'warning'}>
+									{$t(`home.${opStatus.statusKey}`)}
 								</Badge>
 							</div>
 						</a>

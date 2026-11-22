@@ -1,12 +1,12 @@
 /**
- * SUTRAF Domain Services Layer
- * 
- * Domain logic separated from UI components:
- * - Urban transport query helpers
- * - Intercity trip search & itinerary services
- * - Deterministic ETA calculation & incident delay simulation
- * 
- * Realized in Phase 3 & 4.
+ * SUTRAF Services Layer Index
+ * Central export for all domain services.
  */
+
+export * from './urbanService.js';
+export * from './intercityService.js';
+export * from './operatorService.js';
+export * from './simulationService.js';
+export * from './passengerService.js';
 
 export const SERVICES_INITIALIZED = true;

@@ -36,11 +36,16 @@ changing scope.
 5.  Keep mock data and domain logic separate from Svelte components.
 6.  Use stable IDs and entity references. Avoid duplicating entire
     related records.
-7.  Keep passenger, company/driver and global admin experiences
-    distinct.
-8.  Company/driver mock operations must be scoped to that company's
-    records.
+7.  Keep passenger, operator (company/driver) and global admin
+    experiences distinct. Note: Company and Driver share the same
+    operator workspace and logic, with the sole difference that a Company
+    manages multiple buses while a Driver manages only one bus.
+8.  Company/driver mock operations must be scoped to that operator's
+    records (a company sees its fleet; a driver sees their single bus).
 9.  Frontend role checks are demonstration behaviour, not security.
+    In future production, users will register as one distinct user type
+    (Passenger, Driver/Company, Admin) without cross-role switching, and
+    the 3 demo role-preview buttons will be removed.
 10. The passenger experience is mobile-first. Desktop may show a centred
     phone-sized passenger shell; admin screens may use wider layouts.
 11. Support Arabic RTL and English LTR throughout the application.
@@ -379,17 +384,27 @@ Real user accounts, payments, notifications, support integrations.
 # Phase 8 --- Demo roles and Company / Driver workspace
 
 **Goal:** Add demonstration role selection and a functional
-operator-side workspace.
+operator-side workspace. Clearly represent Company (managing multiple
+buses) and Driver (managing only one bus).
 
 ### Tasks
 
 -   Add a clearly labelled demo account/role selection experience.
--   Support Passenger, Company/Driver and Global Admin roles.
+-   Support Passenger, Company/Driver and Global Admin demo roles.
+-   Represent the core distinction between Company and Driver:
+    Company manages and checks multiple buses ($N > 1$), while a Driver
+    manages and checks only one single assigned bus ($1$).
+-   Architecture note for future releases: In future production with
+    real authentication, users will register/login as a specific user type
+    and cannot freely switch between roles; the 3 demo role-preview
+    buttons will be removed once real authentication is implemented
+    (retain buttons during current demo phases).
 -   Use structured demo user records; do not implement real
     authentication.
 -   Route each demo role to its appropriate workspace.
 -   Build the Company/Driver dashboard.
--   Build a fleet list showing only the selected demo company's buses.
+-   Build a fleet list showing only the selected demo company's buses
+    (or single bus for driver).
 -   Implement add/edit bus forms with validation and clear feedback.
 -   Allow assigning a bus only to routes available to that company.
 -   Allow updating mock bus status and relevant schedule/timing fields
@@ -404,8 +419,9 @@ operator-side workspace.
 
 ### Acceptance criteria
 
--   Demo role switching works.
+-   Demo role switching works (retaining the 3 preview buttons for now).
 -   Company/Driver user sees only its company's records.
+-   Company view displays multiple buses; Driver view displays single bus.
 -   Add/edit operations update the shared mock data state during the
     session.
 -   Bus assignment is constrained to valid company routes.

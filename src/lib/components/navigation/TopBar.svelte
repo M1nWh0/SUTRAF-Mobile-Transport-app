@@ -2,7 +2,7 @@
 	import { MapPin, SlidersHorizontal } from '@lucide/svelte';
 	import LanguageToggle from '$lib/components/navigation/LanguageToggle.svelte';
 	import ThemeToggle from '$lib/components/navigation/ThemeToggle.svelte';
-	import { t } from '$lib/i18n/index.js';
+	import { t, locale } from '$lib/i18n/index.js';
 
 	let { activeCity = null } = $props();
 
@@ -11,17 +11,16 @@
 
 <header class="sticky top-0 z-40 w-full border-b border-border/80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 pt-safe">
 	<div class="flex h-14 items-center justify-between px-3 sm:px-4 max-w-md mx-auto md:max-w-none">
-		<!-- Brand & Logo -->
+		<!-- Brand & Logo: single name matching active language -->
 		<a href="/" class="flex items-center gap-2 group shrink-0">
 			<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-700 text-white font-bold text-sm tracking-wider shadow-sm group-hover:bg-emerald-800 transition-colors">
-				S
+				{$locale === 'ar' ? 'س' : 'S'}
 			</div>
 			<div class="flex flex-col">
-				<div class="flex items-center gap-1.5">
-					<span class="font-bold text-base tracking-tight text-foreground">SUTRAF</span>
-					<span class="text-[11px] font-medium text-emerald-700 dark:text-emerald-400">ستراف</span>
-				</div>
-				<span class="text-[10px] text-muted-foreground -mt-1 hidden xs:inline leading-none">
+				<span class="font-bold text-base tracking-tight text-foreground leading-tight">
+					{$t('app.name')}
+				</span>
+				<span class="text-[10px] text-muted-foreground hidden xs:inline leading-none">
 					{$t('app.shortTagline')}
 				</span>
 			</div>
