@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		/* Neutral slate foundations */
+		--background: 210 20% 98%;
+		--foreground: 222 47% 11%;
+		--card: 0 0% 100%;
+		--card-foreground: 222 47% 11%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 222 47% 11%;
+
+		/* SUTRAF primary: Authoritative Algerian transit emerald */
+		--primary: 160 84% 28%;
+		--primary-foreground: 150 100% 98%;
+
+		/* Secondary: Cool transit slate */
+		--secondary: 210 20% 93%;
+		--secondary-foreground: 222 47% 15%;
+
+		/* Muted states */
+		--muted: 210 20% 94%;
+		--muted-foreground: 215 16% 47%;
+
+		/* Interactive accent */
+		--accent: 160 60% 94%;
+		--accent-foreground: 160 84% 22%;
+
+		/* Destructive */
+		--destructive: 0 84% 60%;
+		--destructive-foreground: 210 40% 98%;
+
+		/* Borders & Inputs */
+		--border: 214 32% 91%;
+		--input: 214 32% 91%;
+		--ring: 160 84% 28%;
+
+		/* Radius */
+		--radius: 0.75rem;
+
+		/* Transit semantic tokens */
+		--transit-emerald: 160 84% 32%;
+		--transit-amber: 38 92% 50%;
+		--transit-sky: 199 89% 48%;
+		--transit-rose: 350 89% 60%;
+		--transit-purple: 262 83% 58%;
+	}
+
+	.dark {
+		--background: 222 47% 7%;
+		--foreground: 210 40% 98%;
+		--card: 222 47% 10%;
+		--card-foreground: 210 40% 98%;
+		--popover: 222 47% 10%;
+		--popover-foreground: 210 40% 98%;
+
+		--primary: 160 70% 45%;
+		--primary-foreground: 160 90% 10%;
+
+		--secondary: 217 33% 17%;
+		--secondary-foreground: 210 40% 98%;
+
+		--muted: 217 33% 17%;
+		--muted-foreground: 215 20% 65%;
+
+		--accent: 160 40% 18%;
+		--accent-foreground: 160 70% 75%;
+
+		--destructive: 0 63% 40%;
+		--destructive-foreground: 210 40% 98%;
+
+		--border: 217 33% 18%;
+		--input: 217 33% 18%;
+		--ring: 160 70% 45%;
+
+		--transit-emerald: 160 70% 45%;
+		--transit-amber: 38 92% 55%;
+		--transit-sky: 199 89% 55%;
+		--transit-rose: 350 89% 65%;
+		--transit-purple: 262 83% 65%;
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+		font-feature-settings: 'rlig' 1, 'calt' 1;
+	}
+}
+
+/* Mobile-first safe area utilities */
+.pt-safe {
+	padding-top: env(safe-area-inset-top, 0px);
+}
+.pb-safe {
+	padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Smooth transit scrolling */
+html {
+	scroll-behavior: smooth;
+	-webkit-tap-highlight-color: transparent;
+}
