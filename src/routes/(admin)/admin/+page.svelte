@@ -7,6 +7,7 @@
 	import CardContent from '$lib/components/ui/CardContent.svelte';
 	import Badge from '$lib/components/ui/Badge.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
+	import { t } from '$lib/i18n/index.js';
 </script>
 
 <div class="flex-1 flex flex-col p-4 sm:p-6 space-y-5">
@@ -15,18 +16,18 @@
 		<div>
 			<div class="flex items-center gap-2">
 				<a href="/" class="p-1 rounded-lg hover:bg-secondary text-muted-foreground hover:text-foreground">
-					<ArrowLeft class="h-4 w-4" />
+					<ArrowLeft class="h-4 w-4 rtl:rotate-180 transition-transform" />
 				</a>
-				<h1 class="text-xl font-bold tracking-tight">Administration Globale SUTRAF</h1>
+				<h1 class="text-xl font-bold tracking-tight">{$t('adminPage.title')}</h1>
 			</div>
 			<p class="text-xs text-muted-foreground mt-0.5">
-				Supervision de l'ensemble du réseau, wilayas, opérateurs et incidents
+				{$t('adminPage.subtitle')}
 			</p>
 		</div>
 
 		<div class="flex items-center gap-2">
-			<Badge variant="destructive">Accès Administrateur Global</Badge>
-			<Badge variant="simulation">Simulation Active</Badge>
+			<Badge variant="destructive">{$t('adminPage.adminBadge')}</Badge>
+			<Badge variant="simulation">{$t('adminPage.simBadge')}</Badge>
 		</div>
 	</div>
 
@@ -34,65 +35,65 @@
 	<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 		<Card class="p-3.5">
 			<div class="flex items-center justify-between text-muted-foreground text-xs">
-				<span>Wilayas & Villes</span>
-				<MapPin class="h-4 w-4 text-emerald-600" />
+				<span>{$t('adminPage.wilayasTitle')}</span>
+				<MapPin class="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
 			</div>
-			<div class="mt-2 text-xl font-bold">58 Wilayas</div>
-			<span class="text-[10px] text-muted-foreground">3 Villes urbaines modélisées</span>
+			<div class="mt-2 text-xl font-bold">{$t('adminPage.wilayasCount')}</div>
+			<span class="text-[10px] text-muted-foreground">{$t('adminPage.wilayasDesc')}</span>
 		</Card>
 
 		<Card class="p-3.5">
 			<div class="flex items-center justify-between text-muted-foreground text-xs">
-				<span>Lignes & Tracés</span>
-				<Route class="h-4 w-4 text-emerald-600" />
+				<span>{$t('adminPage.linesTitle')}</span>
+				<Route class="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
 			</div>
-			<div class="mt-2 text-xl font-bold">24 Lignes</div>
-			<span class="text-[10px] text-muted-foreground">Tracés GeoJSON & Arrêts</span>
+			<div class="mt-2 text-xl font-bold">{$t('adminPage.linesCount')}</div>
+			<span class="text-[10px] text-muted-foreground">{$t('adminPage.linesDesc')}</span>
 		</Card>
 
 		<Card class="p-3.5">
 			<div class="flex items-center justify-between text-muted-foreground text-xs">
-				<span>Flottes Totales</span>
-				<Bus class="h-4 w-4 text-emerald-600" />
+				<span>{$t('adminPage.fleetTitle')}</span>
+				<Bus class="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
 			</div>
-			<div class="mt-2 text-xl font-bold">48 Véhicules</div>
-			<span class="text-[10px] text-muted-foreground">Toutes compagnies confondues</span>
+			<div class="mt-2 text-xl font-bold">{$t('adminPage.fleetCount')}</div>
+			<span class="text-[10px] text-muted-foreground">{$t('adminPage.fleetDesc')}</span>
 		</Card>
 
 		<Card class="p-3.5">
 			<div class="flex items-center justify-between text-muted-foreground text-xs">
-				<span>Incidents Actifs</span>
-				<AlertTriangle class="h-4 w-4 text-amber-600" />
+				<span>{$t('adminPage.incidentsTitle')}</span>
+				<AlertTriangle class="h-4 w-4 text-amber-600 dark:text-amber-400" />
 			</div>
-			<div class="mt-2 text-xl font-bold">2 Signalements</div>
-			<span class="text-[10px] text-amber-600 font-medium">+5 à +15 min retards calculés</span>
+			<div class="mt-2 text-xl font-bold">{$t('adminPage.incidentsCount')}</div>
+			<span class="text-[10px] text-amber-600 dark:text-amber-400 font-medium">{$t('adminPage.incidentsDesc')}</span>
 		</Card>
 	</div>
 
 	<!-- Management Sections -->
 	<Card>
 		<CardHeader>
-			<CardTitle class="text-base">Modules de Gestion des Données (Phase 6)</CardTitle>
+			<CardTitle class="text-base">{$t('adminPage.modulesTitle')}</CardTitle>
 			<CardDescription>
-				Gestion des données mock en mémoire avec mise à jour réactive des simulations
+				{$t('adminPage.modulesDesc')}
 			</CardDescription>
 		</CardHeader>
 		<CardContent class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
 			<div class="p-3 rounded-lg bg-secondary/50 border border-border/50 space-y-1">
-				<span class="font-semibold block text-foreground">Villes & Wilayas</span>
-				<p class="text-muted-foreground text-[11px]">Gestion des centres géographiques et wilayas de départ/arrivée.</p>
+				<span class="font-semibold block text-foreground">{$t('adminPage.citiesMod')}</span>
+				<p class="text-muted-foreground text-[11px]">{$t('adminPage.citiesModDesc')}</p>
 			</div>
 			<div class="p-3 rounded-lg bg-secondary/50 border border-border/50 space-y-1">
-				<span class="font-semibold block text-foreground">Lignes & Arrêts Urbains</span>
-				<p class="text-muted-foreground text-[11px]">Édition des séquences d'arrêts et des coordonnées GeoJSON.</p>
+				<span class="font-semibold block text-foreground">{$t('adminPage.routesMod')}</span>
+				<p class="text-muted-foreground text-[11px]">{$t('adminPage.routesModDesc')}</p>
 			</div>
 			<div class="p-3 rounded-lg bg-secondary/50 border border-border/50 space-y-1">
-				<span class="font-semibold block text-foreground">Compagnies de Transport</span>
-				<p class="text-muted-foreground text-[11px]">Gestion des opérateurs conventionnés (ETUSA, SOGRAL, etc.).</p>
+				<span class="font-semibold block text-foreground">{$t('adminPage.companiesMod')}</span>
+				<p class="text-muted-foreground text-[11px]">{$t('adminPage.companiesModDesc')}</p>
 			</div>
 			<div class="p-3 rounded-lg bg-secondary/50 border border-border/50 space-y-1">
-				<span class="font-semibold block text-foreground">Incidents & Ralentissements</span>
-				<p class="text-muted-foreground text-[11px]">Injection de délais déterminés affectant le calcul d'ETA.</p>
+				<span class="font-semibold block text-foreground">{$t('adminPage.incidentsMod')}</span>
+				<p class="text-muted-foreground text-[11px]">{$t('adminPage.incidentsModDesc')}</p>
 			</div>
 		</CardContent>
 	</Card>

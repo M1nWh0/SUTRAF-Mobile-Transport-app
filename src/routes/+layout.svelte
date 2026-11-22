@@ -1,20 +1,29 @@
 <script>
 	import '../app.css';
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+	import { ModeWatcher } from 'mode-watcher';
 	import DemoRoleBanner from '$lib/components/navigation/DemoRoleBanner.svelte';
 	import PhoneFrame from '$lib/components/navigation/PhoneFrame.svelte';
 	import TopBar from '$lib/components/navigation/TopBar.svelte';
 	import BottomNav from '$lib/components/navigation/BottomNav.svelte';
+	import { initI18n, dir } from '$lib/i18n/index.js';
 
 	let { children } = $props();
 
-	// Passenger routes show the bottom navigation bar
+	onMount(() => {
+		initI18n();
+	});
+
+	// Passenger routes show top bar and bottom navigation bar
 	let isPassengerRoute = $derived(
 		!$page.url.pathname.startsWith('/company') && !$page.url.pathname.startsWith('/admin')
 	);
 </script>
 
-<div class="flex flex-col min-h-screen">
+<ModeWatcher />
+
+<div class="flex flex-col min-h-screen" dir={$dir}>
 	<!-- Demo role indicator & simulation honesty banner -->
 	<DemoRoleBanner />
 

@@ -14,12 +14,12 @@ checked and the application still runs.
 
 ## Global project checks
 
--   [ ] JavaScript only; no TypeScript introduced.
--   [ ] SvelteKit + Svelte 5 remain the application foundation.
--   [ ] Tailwind CSS and shadcn-svelte are used consistently.
--   [ ] `mode-watcher` handles theme behaviour.
+-   [x] JavaScript only; no TypeScript introduced.
+-   [x] SvelteKit + Svelte 5 remain the application foundation.
+-   [x] Tailwind CSS and shadcn-svelte are used consistently.
+-   [x] `mode-watcher` handles theme behaviour.
 -   [ ] Mock data and domain logic are separate from components.
--   [ ] Arabic RTL and English LTR are supported.
+-   [x] Arabic RTL and English LTR are supported.
 -   [ ] Passenger, Company/Driver and Global Admin experiences are
     distinct.
 -   [ ] Company data operations are scoped to the selected company.
@@ -57,24 +57,30 @@ checked and the application still runs.
 
 ## Phase 2 --- Responsive shell, localization and theme
 
--   [ ] Arabic translation dictionary added for current shell.
--   [ ] English translation dictionary added for current shell.
--   [ ] Language switch works.
--   [ ] Language preference persists.
--   [ ] Document `lang` and `dir` update correctly.
--   [ ] RTL changes layout flow, alignment and navigation.
--   [ ] `mode-watcher` integrated.
--   [ ] Light/dark theme switch works.
--   [ ] Theme preference persists.
--   [ ] Semantic colour tokens established.
--   [ ] Mobile layout works.
--   [ ] Desktop passenger presentation works.
--   [ ] Admin shell can use wider layouts.
--   [ ] Touch targets and safe-area spacing checked.
--   [ ] Build/checks pass.
--   [ ] Phase report received.
+-   [x] Arabic translation dictionary added for current shell.
+-   [x] English translation dictionary added for current shell.
+-   [x] Language switch works.
+-   [x] Language preference persists.
+-   [x] Document `lang` and `dir` update correctly.
+-   [x] RTL changes layout flow, alignment and navigation.
+-   [x] `mode-watcher` integrated.
+-   [x] Light/dark theme switch works.
+-   [x] Theme preference persists.
+-   [x] Semantic colour tokens established.
+-   [x] Mobile layout works.
+-   [x] Desktop passenger presentation works.
+-   [x] Admin shell can use wider layouts.
+-   [x] Touch targets and safe-area spacing checked.
+-   [x] Build/checks pass.
+-   [x] Phase report received.
 
-**Verification notes:** - Commands: - Issues: - Commit / checkpoint:
+**Verification notes:**
+- Commands: `npm run build` (built SSR and client bundles in ~45s), `npm run preview -- --port 4173`, `curl.exe` verifying HTTP 200 on `/`, `/urban`, `/intercity`, `/lines`, `/tickets`, `/profile`, `/company`, `/admin` and HTTP 404 on `/nonexistent`.
+- Issues caught & fixed:
+  1. Replaced lingering Phase 1 French placeholder strings across all pages with structured Arabic and English dictionaries.
+  2. Fixed Svelte 5 store vs rune subscription in `mode-watcher` v1 (used `mode.current` and `userPrefersMode.current` with `.setMode()` / `.resetMode()` instead of Svelte 4 `$mode`).
+  3. Added inline script in `app.html` to eliminate direction/language flicker prior to hydration.
+- Commit / checkpoint: Phase 2 responsive shell, localization and theme complete.
 
 ## Phase 3 --- Domain model and structured mock data
 

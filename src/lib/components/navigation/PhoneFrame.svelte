@@ -1,5 +1,6 @@
 <script>
 	import { page } from '$app/stores';
+	import { dir } from '$lib/i18n/index.js';
 
 	let { children } = $props();
 
@@ -9,7 +10,10 @@
 	);
 </script>
 
-<div class="min-h-screen w-full flex flex-col items-center justify-start bg-slate-200/60 dark:bg-slate-950">
+<div
+	dir={$dir}
+	class="min-h-screen w-full flex flex-col items-center justify-start bg-slate-200/60 dark:bg-slate-950 transition-colors"
+>
 	{#if isWideLayout}
 		<!-- Wide Workspace layout for Company & Admin -->
 		<div class="w-full max-w-6xl min-h-[calc(100vh-32px)] bg-background border-x border-border/50 shadow-sm flex flex-col">
